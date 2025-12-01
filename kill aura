@@ -1,0 +1,28 @@
+-- Script ใน StarterCharacterScripts
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+
+local attackRange = 10
+local damage = 20
+
+-- ฟังก์ชันโจมตี
+function attack()
+	for _, target in pairs(workspace:GetChildren()) do
+		if target:FindFirstChild("Humanoid") and target ~= character then
+			local distance = (target.PrimaryPart.Position - character.PrimaryPart.Position).magnitude
+			if distance <= attackRange then
+				target.Humanoid:TakeDamage(damage)
+			end
+		end
+	end
+end
+
+-- เมื่อกดปุ่ม F ให้โจมตี
+local UserInputService = game:GetService("UserInputService")
+UserInputService.InputBegan:Connect(function(input, gp)
+	if gp then return end
+	if input.KeyCode == Enum.KeyCode.F then
+		attack()
+	end
+end)
